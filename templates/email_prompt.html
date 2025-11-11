@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h3>Welcome!</h3>
+            <p>Enter your email to start tracking your scans.</p>
+
+            <form method="POST" action="/cgi-bin/scan.py?code={{ code }}">
+                <div class="form-group">
+                    <label for="email" class="sr-only">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control mb-2"
+                        placeholder="you@example.com"
+                        required
+                    />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

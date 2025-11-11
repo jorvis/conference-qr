@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if no_email %}
+        <div class="card">
+            <div class="card-body">
+                <h3>Check your progress</h3>
+                <form method="GET">
+                    <input type="email" name="email" class="form-control mb-2"
+                                 placeholder="you@example.com" required>
+                    <button class="btn btn-primary">Show</button>
+                </form>
+            </div>
+        </div>
+
+    {% elif not_found %}
+        <div class="alert alert-warning">
+            No scans found for {{ email }}
+        </div>
+
+    {% else %}
+        <h3>{{ email }}</h3>
+
+        {# compute percentages for clearer markup #}
+        {% set exhibitors_pct = (exhibitors / 12 * 100) | round(0) %}
+        {% set sessions_pct = (sessions / 3 * 100) | round(0) %}
+
+        <div class="mb-3">
+            <label>Exhibitors ({{ exhibitors }}/12)</label>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                         style="width: {{ exhibitors_pct }}%;"
+                         aria-valuenow="{{ exhibitors_pct }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ exhibitors_pct }}%
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Sessions ({{ sessions }}/3)</label>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                         style="width: {{ sessions_pct }}%;"
+                         aria-valuenow="{{ sessions_pct }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ sessions_pct }}%
+                </div>
+            </div>
+        </div>
+
+        {% if qualified %}
+            <div class="alert alert-primary">
+                🎉 Congrats! You’ve earned a free drink ticket.
+            </div>
+        {% endif %}
+
+        <ul class="list-group">
+            {% for s in scanned %}
+                <li class="list-group-item">
+                    {{ s.code }} — {{ s.name }} ({{ s.type }})
+                </li>
+            {% else %}
+                <li class="list-group-item">No scans to show.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
