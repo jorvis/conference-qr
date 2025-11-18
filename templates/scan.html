@@ -1,1 +1,35 @@
-{% extends 'base.html' %}{% block content %}{% if message %}<div class='alert alert-info'>{{ message }}</div>{% else %}<div class='alert alert-success'>Scan recorded for <strong>{{ place.name }}</strong> ({{ place.type }}).</div><p><strong>{{ email }}</strong></p><div class='mb-3'><label>Exhibitors ({{ exhibitors }}/12)</label><div class='progress'><div class='progress-bar' style='width: {{ exhibitors/12*100 }}%'></div></div></div><div class='mb-3'><label>Sessions ({{ sessions }}/3)</label><div class='progress'><div class='progress-bar' style='width: {{ sessions/3*100 }}%'></div></div></div>{% if qualified %}<div class='alert alert-primary'>🎉 Congrats! You’ve earned your free drink!</div>{% else %}<div class='alert alert-info'>Keep going — you’re almost there!</div>{% endif %}{% endif %}{% endblock %}
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if message %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+    {% else %}
+        <div class="alert alert-success">
+            Scan recorded for <strong>{{ place.name }}</strong> ({{ place.type }}).
+        </div>
+
+        <p><strong>{{ email }}</strong></p>
+
+        <div class="mb-3">
+            <label>Exhibitors ({{ exhibitors }}/12)</label>
+            <div class="progress" role="progressbar" aria-valuenow="{{ exhibitors }}" aria-valuemin="0" aria-valuemax="12">
+                <div class="progress-bar" style="width: {{ (exhibitors / 12 * 100) | round(0) }}%;"></div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Sessions ({{ sessions }}/3)</label>
+            <div class="progress" role="progressbar" aria-valuenow="{{ sessions }}" aria-valuemin="0" aria-valuemax="3">
+                <div class="progress-bar" style="width: {{ (sessions / 3 * 100) | round(0) }}%;"></div>
+            </div>
+        </div>
+
+        {% if qualified %}
+            <div class="alert alert-primary">🎉 Congrats! You’ve earned your free drink!</div>
+        {% else %}
+            <div class="alert alert-info">Keep going — you’re almost there!</div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

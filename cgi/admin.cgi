@@ -30,7 +30,7 @@ def main():
     cur.execute(leaderboard_query)
     
     leaderboard=cur.fetchall()
-    
+
     print_html(render_template("admin.html", attendees=attendees, scans=scans, leaderboard=leaderboard))
 
 if __name__=="__main__": main()

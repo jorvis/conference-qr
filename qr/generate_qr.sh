@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Ensure BASE_URL is set
-: "${BASE_URL:?Set BASE_URL like https://your-domain.example}"
+BASE_URL="localhost"
 
 # Set output directory
 OUTDIR="${1:-qr_out}"
@@ -17,7 +17,7 @@ codes=(
 
 # Generate QR codes
 for code in "${codes[@]}"; do
-    url="${BASE_URL}/cgi-bin/scan.py?code=${code}"
+    url="${BASE_URL}/cgi/scan.cgi?code=${code}"
     output_file="${OUTDIR}/${code}.png"
     
     qrencode -o "$output_file" "$url"

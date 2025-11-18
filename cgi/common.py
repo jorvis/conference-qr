@@ -2,7 +2,7 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from config import CONFERENCE_NAME
 
-env=Environment(loader=FileSystemLoader("/var/www/html/cgi-bin/templates"),autoescape=select_autoescape(["html","xml"]))
+env=Environment(loader=FileSystemLoader("/var/www/html/templates"),autoescape=select_autoescape(["html","xml"]))
 
 def render_template(name,**ctx):
     ctx.setdefault("conference_name",CONFERENCE_NAME)
