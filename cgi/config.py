@@ -6,8 +6,12 @@ DB_CONFIG={
     "port":3306
 }
 
-BASE_URL="https://example.org"
+# Make sure this matches in generate_qr.sh
+BASE_URL="http://localhost"
 
 CONFERENCE_NAME="ConferenceQR Demo"
 
 ADMIN_KEY="change_me_admin_key"
+
+# Make sure this matches in generate_qr.sh
+QR_SECRET = "choose_a_very_long_random_secret"

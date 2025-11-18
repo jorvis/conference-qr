@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
 import os, cgi, http.cookies
+import hmac, hashlib
+from config import QR_SECRET
+
 from db import get_db
 from common import render_template, print_html
 
 def main():
     form = cgi.FieldStorage()
     code = form.getfirst("code", "").strip()
+    sig = form.getfirst("sig", "").strip()
     cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE", ""))
     email = cookie["attendee_email"].value if "attendee_email" in cookie else None
     
@@ -21,9 +25,13 @@ def main():
         if "email" in form:
             email = form.getfirst("email", "").strip().lower()
             print_html("", cookies={"attendee_email": email}, status="303 See Other", 
-                       location=f"/cgi-bin/scan.py?code={code}")
+                       location=f"/cgi/scan.cgi?code={code}")
             return
         print_html(render_template("email_prompt.html", code=code))
+        return
+    
+    if not valid_sig(code, sig):
+        print_html(render_template("scan.html", message="Invalid or tampered QR code."))
         return
 
     cur.execute("SELECT id, name, type FROM places WHERE code=%s", (code,))
@@ -53,5 +61,9 @@ def main():
 
     cur.close()
     conn.close()
+
+def valid_sig(code, sig):
+    expected = hmac.new(QR_SECRET.encode(), code.encode(), hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, sig)
 
 if __name__=="__main__": main()

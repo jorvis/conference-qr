@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Ensure BASE_URL is set
-BASE_URL="localhost"
+# You must make these match what is in config.py
+BASE_URL="http://localhost"
+QR_SECRET="choose_a_very_long_random_secret"
 
 # Set output directory
 OUTDIR="${1:-qr_out}"
@@ -17,7 +18,8 @@ codes=(
 
 # Generate QR codes
 for code in "${codes[@]}"; do
-    url="${BASE_URL}/cgi/scan.cgi?code=${code}"
+    sig=$(echo -n "$code" | openssl dgst -sha256 -hmac "$QR_SECRET" | cut -d" " -f2)
+    url="${BASE_URL}/cgi/scan.cgi?code=${code}&sig=${sig}"
     output_file="${OUTDIR}/${code}.png"
     
     qrencode -o "$output_file" "$url"
