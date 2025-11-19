@@ -45,9 +45,13 @@ def main():
     conn.commit()
     cur.execute("SELECT id FROM attendees WHERE email=%s", (email,))
     attendee_id = cur.fetchone()["id"]
+
     cur.execute("INSERT IGNORE INTO scans (attendee_id, place_id) VALUES (%s, %s)", 
                 (attendee_id, place["id"]))
     conn.commit()
+
+    # INSERT IGNORE returns rowcount=0 when the record already exists, i.e., duplicate scan.
+    duplicate_scan = (cur.rowcount == 0)
 
     cur.execute("SELECT SUM(p.type='exhibitor') exhibitors, SUM(p.type='session') sessions "
                 "FROM scans s JOIN places p ON p.id=s.place_id WHERE s.attendee_id=%s", 
@@ -57,7 +61,7 @@ def main():
 
     print_html(render_template("scan.html", place=place, email=email, 
                                exhibitors=p["exhibitors"], sessions=p["sessions"], 
-                               qualified=q))
+                               qualified=q, duplicate_scan=duplicate_scan))
 
     cur.close()
     conn.close()

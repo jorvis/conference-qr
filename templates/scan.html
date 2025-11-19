@@ -6,9 +6,16 @@
             {{ message }}
         </div>
     {% else %}
-        <div class="alert alert-success">
+        {% if duplicate_scan %}
+            <div class="alert alert-secondary">
+            You already scanned <strong>{{ place.name }}</strong>.  
+            Progress unchanged.
+            </div>
+        {% else %}
+            <div class="alert alert-success">
             Scan recorded for <strong>{{ place.name }}</strong> ({{ place.type }}).
-        </div>
+            </div>
+        {% endif %}
 
         <p><strong>{{ email }}</strong></p>
 

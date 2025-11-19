@@ -88,6 +88,13 @@ CREATE USER confqr@localhost IDENTIFIED BY 'YOUR_DB_PASSWORD';
 GRANT SELECT, INSERT, UPDATE, DELETE ON conferenceqr.* to confqr@localhost;
 ```
 
+You'll probably want to change the demo banner image to something for your 
+conference. To do so, just replace the file: /img/banner.png
+
+That one scales well.  The other one to change is: /img/powered_by.png
+
+That one doesn't. Make it small. :)
+
 ---
 
 ## 🧾 5. Generate QR Codes
