@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 
-import os, cgi, http.cookies
+import os, cgi
 from db import get_db
+from config import ADMIN_KEY
 from common import render_template, print_html
 
 def main():
-    cookie = http.cookies.SimpleCookie(
-        os.environ.get("HTTP_COOKIE", "")
-    )
-
-    email = (
-        cookie["attendee_email"].value
-        if "attendee_email" in cookie
-        else None
-    )
-
     form = cgi.FieldStorage()
+    key = form.getfirst("key", "")
+    email = form.getfirst("email", "").strip().lower()
+
+    if key != ADMIN_KEY: 
+        print_html(render_template("admin.html", unauthorized=True))
+        return
+
     if form.getfirst("email"):
         email = form.getfirst("email").strip().lower()
     if not email:

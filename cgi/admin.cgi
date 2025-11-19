@@ -6,7 +6,8 @@ from config import ADMIN_KEY
 from common import render_template, print_html
 
 def main():
-    form=cgi.FieldStorage(); key=form.getfirst("key","")
+    form=cgi.FieldStorage();
+    key=form.getfirst("key","")
 
     if key != ADMIN_KEY: 
         print_html(render_template("admin.html", unauthorized=True))
@@ -31,6 +32,10 @@ def main():
     
     leaderboard=cur.fetchall()
 
-    print_html(render_template("admin.html", attendees=attendees, scans=scans, leaderboard=leaderboard))
+    print_html(render_template("admin.html", 
+                               attendees=attendees, 
+                               scans=scans, 
+                               leaderboard=leaderboard,
+                               admin_key=key))
 
 if __name__=="__main__": main()
