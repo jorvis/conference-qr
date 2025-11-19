@@ -142,20 +142,4 @@ sudo systemctl reload apache2
 
 ---
 
-## ✅ Summary of Differences from Original Version
-
-| Step | Change |
-|------|---------|
-| Install Python deps | Add `jinja2` |
-| Template handling | Templates now live in `/cgi-bin/templates` |
-| Functionality | Same user flow: first scan → email prompt → progress tracking |
-
----
-
-## 🧩 Optional: Docker Setup
-
-If you prefer a containerized environment, ask ChatGPT for a `Dockerfile` and `docker-compose.yml` to run Apache + MySQL + Python with this app preloaded.
-
----
-
 Happy scanning! 🎉
