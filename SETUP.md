@@ -1,6 +1,6 @@
-# 🧭 ConferenceQR (Jinja2 Version) — Setup Instructions
+# 🧭 ConferenceQR — Setup Instructions
 
-This document explains how to install, configure, and run the Jinja2 version of **ConferenceQR**, a LAMP-based QR scanning and reward tracker for conferences.
+This document explains how to install, configure, and run **ConferenceQR**, a LAMP-based QR scanning and reward tracker for conferences.
 
 ---
 
@@ -50,8 +50,8 @@ sudo cp -r cgi-bin /var/www/html/
 Ensure proper permissions:
 
 ```bash
-sudo chown -R www-data:www-data /var/www/html/cgi-bin
-sudo chmod -R 755 /var/www/html/cgi-bin
+sudo chown -R www-data:www-data /var/www/html/cgi
+sudo chmod -R 755 /var/www/html/cgi
 ```
 
 Enable CGI if not already:
@@ -77,6 +77,7 @@ DB_CONFIG = {
 BASE_URL = "https://your-domain.example"
 CONFERENCE_NAME = "My Awesome Conference 2025"
 ADMIN_KEY = "choose_a_secret_key"
+QR_SECRET = "choose_a_long_secret_key"
 ```
 
 Don't forget to also actually create this user!
@@ -91,11 +92,11 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON conferenceqr.* to confqr@localhost;
 
 ## 🧾 5. Generate QR Codes
 
-From the `qr` directory:
+From the `qr` directory, first modify the ENV variables at the top of the script, then:
 
 ```bash
 cd qr
-BASE_URL="https://your-domain.example" ./generate_qr.sh
+./generate_qr.sh
 ```
 
 This generates PNG files like:
@@ -105,8 +106,8 @@ E01.png  E02.png  ...  E24.png  S01.png  S02.png  S03.png
 ```
 
 Each links to:
-- `/cgi-bin/scan.py?code=E01`
-- `/cgi-bin/scan.py?code=S01`
+- `/cgi/scan.cgi?code=E01`
+- `/cgi/scan.cgi?code=S01`
 etc.
 
 ---
@@ -115,9 +116,9 @@ etc.
 
 Open these in your browser:
 
-- **Attendee scan:** `https://your-domain.example/cgi-bin/scan.py?code=E01`
-- **Progress page:** `https://your-domain.example/cgi-bin/progress.py`
-- **Admin dashboard:** `https://your-domain.example/cgi-bin/admin.py?key=YOUR_ADMIN_KEY`
+- **Attendee scan:** `https://your-domain.example/cgi/scan.cgi?code=E01`
+- **Progress page:** `https://your-domain.example/cgi/progress.cgi`
+- **Admin dashboard:** `https://your-domain.example/cgi/admin.cgi?key=YOUR_ADMIN_KEY`
 
 ---
 
@@ -126,8 +127,8 @@ Open these in your browser:
 If your server does not yet serve `/cgi-bin` paths, add this to your Apache config:
 
 ```apache
-ScriptAlias /cgi-bin/ /var/www/html/cgi-bin/
-<Directory "/var/www/html/cgi-bin">
+ScriptAlias /cgi/ /var/www/html/cgi/
+<Directory "/var/www/html/cgi">
     Options +ExecCGI
     AddHandler cgi-script .py
     Require all granted
