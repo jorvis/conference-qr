@@ -23,7 +23,7 @@ def main():
     conn = get_db()
     cur = conn.cursor(dictionary=True)
     cur.execute(
-        "SELECT id FROM attendees WHERE email=%s", (email,)
+        "SELECT id, name FROM attendees WHERE email=%s", (email,)
     )
 
     row = cur.fetchone()
@@ -33,6 +33,8 @@ def main():
         return
 
     aid = row["id"]
+    attendee_name = row["name"]
+    
     cur.execute(
         "SELECT SUM(p.type='exhibitor') exhibitors, "
         "SUM(p.type='session') sessions FROM scans s "
@@ -42,21 +44,38 @@ def main():
     p = cur.fetchone() or {"exhibitors": 0, "sessions": 0}
 
     q = p["exhibitors"] >= 12 and p["sessions"] >= 3
-    cur.execute(
-        "SELECT p.code, p.name, p.type, s.scanned_at FROM scans s "
-        "JOIN places p ON s.place_id=p.id WHERE s.attendee_id=%s "
-        "ORDER BY s.scanned_at DESC",
-        (aid,)
-    )
-    scanned = cur.fetchall()
+    
+    # Get all exhibitors with scan status
+    cur.execute("""
+        SELECT p.id, p.name, p.type, 
+               IF(s.id IS NOT NULL, 1, 0) as scanned
+        FROM places p
+        LEFT JOIN scans s ON s.place_id = p.id AND s.attendee_id = %s
+        WHERE p.type = 'exhibitor'
+        ORDER BY p.name
+    """, (aid,))
+    exhibitor_list = cur.fetchall()
+
+    # Get all sessions with scan status
+    cur.execute("""
+        SELECT p.id, p.name, p.type, 
+               IF(s.id IS NOT NULL, 1, 0) as scanned
+        FROM places p
+        LEFT JOIN scans s ON s.place_id = p.id AND s.attendee_id = %s
+        WHERE p.type = 'session'
+        ORDER BY p.name
+    """, (aid,))
+    session_list = cur.fetchall()
 
     print_html(render_template(
         "progress.html",
         email=email,
+        attendee_name=attendee_name,
         exhibitors=p["exhibitors"],
         sessions=p["sessions"],
         qualified=q,
-        scanned=scanned
+        exhibitor_list=exhibitor_list,
+        session_list=session_list
     ))
     
     cur.close()

@@ -19,7 +19,8 @@
         </div>
 
     {% else %}
-        <h3>{{ email }}</h3>
+        <h3>{{ attendee_name }}</h3>
+        <p><strong>{{ email }}</strong></p>
 
         {# compute percentages for clearer markup #}
         {% set exhibitors_pct = (exhibitors / 12 * 100) | round(0) %}
@@ -49,18 +50,43 @@
 
         {% if qualified %}
             <div class="alert alert-primary">
-                🎉 Congrats! You’ve earned a free drink ticket.
+                🎉 Congrats! You've earned a free drink ticket.
             </div>
+        {% else %}
+            <div class="alert alert-info">Keep going — you're almost there!</div>
         {% endif %}
 
-        <ul class="list-group">
-            {% for s in scanned %}
-                <li class="list-group-item">
-                    {{ s.code }} — {{ s.name }} ({{ s.type }})
-                </li>
-            {% else %}
-                <li class="list-group-item">No scans to show.</li>
-            {% endfor %}
-        </ul>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5>Exhibitors</h5>
+                <ul class="list-group">
+                    {% for exhibitor in exhibitor_list %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ exhibitor.name }}
+                            {% if exhibitor.scanned %}
+                                <span class="badge bg-success">✓ Scanned</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not scanned</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Sessions</h5>
+                <ul class="list-group">
+                    {% for session in session_list %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ session.name }}
+                            {% if session.scanned %}
+                                <span class="badge bg-success">✓ Scanned</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not scanned</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
