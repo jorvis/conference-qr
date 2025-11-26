@@ -18,13 +18,13 @@ def main():
     cur.execute("SELECT COUNT(*) c FROM scans"); scans=cur.fetchone()["c"]
 
     leaderboard_query = """
-        SELECT a.email,
+        SELECT a.email, a.name,
             SUM(p.type='exhibitor') AS exhibitors,
             SUM(p.type='session') AS sessions
         FROM attendees a
         LEFT JOIN scans s ON s.attendee_id = a.id
         LEFT JOIN places p ON p.id = s.place_id
-        GROUP BY a.email
+        GROUP BY a.email, a.name
         ORDER BY sessions DESC, exhibitors DESC
         LIMIT 200
     """

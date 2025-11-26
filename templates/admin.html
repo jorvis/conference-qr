@@ -16,6 +16,7 @@
         <table class="table table-sm table-striped">
             <thead>
                 <tr>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Exhibitors</th>
                     <th>Sessions</th>
@@ -24,6 +25,7 @@
             <tbody>
                 {% for row in leaderboard %}
                     <tr>
+                        <td>{{ row.name or '(no name)' }}</td>
                         <td><a href="/cgi/progress.cgi?key={{ admin_key }}&email={{ row.email }}">{{ row.email }}</a></td>
                         <td>{{ row.exhibitors or 0 }}</td>
                         <td>{{ row.sessions or 0 }}</td>
