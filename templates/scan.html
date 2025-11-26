@@ -34,9 +34,42 @@
         </div>
 
         {% if qualified %}
-            <div class="alert alert-primary">🎉 Congrats! You’ve earned your free drink!</div>
+            <div class="alert alert-primary">🎉 Congrats! You've earned your free drink!</div>
         {% else %}
-            <div class="alert alert-info">Keep going — you’re almost there!</div>
+            <div class="alert alert-info">Keep going — you're almost there!</div>
         {% endif %}
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h5>Exhibitors</h5>
+                <ul class="list-group">
+                    {% for exhibitor in exhibitor_list %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ exhibitor.name }}
+                            {% if exhibitor.scanned %}
+                                <span class="badge bg-success">✓ Scanned</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not scanned</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Sessions</h5>
+                <ul class="list-group">
+                    {% for session in session_list %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ session.name }}
+                            {% if session.scanned %}
+                                <span class="badge bg-success">✓ Scanned</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not scanned</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

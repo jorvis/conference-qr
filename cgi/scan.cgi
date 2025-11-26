@@ -59,9 +59,32 @@ def main():
     p = cur.fetchone() or {"exhibitors": 0, "sessions": 0}
     q = (p["exhibitors"] >= 12 and p["sessions"] >= 3)
 
+    # Get all exhibitors with scan status
+    cur.execute("""
+        SELECT p.id, p.name, p.type, 
+               IF(s.id IS NOT NULL, 1, 0) as scanned
+        FROM places p
+        LEFT JOIN scans s ON s.place_id = p.id AND s.attendee_id = %s
+        WHERE p.type = 'exhibitor'
+        ORDER BY p.name
+    """, (attendee_id,))
+    exhibitor_list = cur.fetchall()
+
+    # Get all sessions with scan status
+    cur.execute("""
+        SELECT p.id, p.name, p.type, 
+               IF(s.id IS NOT NULL, 1, 0) as scanned
+        FROM places p
+        LEFT JOIN scans s ON s.place_id = p.id AND s.attendee_id = %s
+        WHERE p.type = 'session'
+        ORDER BY p.name
+    """, (attendee_id,))
+    session_list = cur.fetchall()
+
     print_html(render_template("scan.html", place=place, email=email, 
                                exhibitors=p["exhibitors"], sessions=p["sessions"], 
-                               qualified=q, duplicate_scan=duplicate_scan))
+                               qualified=q, duplicate_scan=duplicate_scan,
+                               exhibitor_list=exhibitor_list, session_list=session_list))
 
     cur.close()
     conn.close()
