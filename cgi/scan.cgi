@@ -33,7 +33,7 @@ def main():
             print_html("", cookies={"attendee_email": email}, status="303 See Other", 
                        location=f"/cgi/scan.cgi?code={code}&sig={sig}")
             return
-        print_html(render_template("email_prompt.html", code=code))
+        print_html(render_template("email_prompt.html", code=code, sig=sig))
         return
     
     if not valid_sig(code, sig):
