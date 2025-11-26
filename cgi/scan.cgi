@@ -24,8 +24,14 @@ def main():
     if not email:
         if "email" in form:
             email = form.getfirst("email", "").strip().lower()
+            name = form.getfirst("name", "").strip()
+            
+            # Insert new attendee with name
+            cur.execute("INSERT IGNORE INTO attendees (email, name) VALUES (%s, %s)", (email, name))
+            conn.commit()
+            
             print_html("", cookies={"attendee_email": email}, status="303 See Other", 
-                       location=f"/cgi/scan.cgi?code={code}")
+                       location=f"/cgi/scan.cgi?code={code}&sig={sig}")
             return
         print_html(render_template("email_prompt.html", code=code))
         return
@@ -41,7 +47,7 @@ def main():
         print_html(render_template("scan.html", message="Invalid QR code."))
         return
 
-    cur.execute("INSERT IGNORE INTO attendees (email) VALUES (%s)", (email,))
+    cur.execute("INSERT IGNORE INTO attendees (email, name) VALUES (%s, %s)", (email, ""))
     conn.commit()
     cur.execute("SELECT id FROM attendees WHERE email=%s", (email,))
     attendee_id = cur.fetchone()["id"]

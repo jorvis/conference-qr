@@ -4,9 +4,21 @@
     <div class="card">
         <div class="card-body">
             <h3>Welcome!</h3>
-            <p>Enter your email to start tracking your scans.</p>
+            <p>Enter your name and email to start tracking your scans.</p>
 
             <form method="POST" action="/cgi/scan.cgi?code={{ code }}">
+                <div class="form-group">
+                    <label for="name" class="sr-only">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-control mb-2"
+                        placeholder="Your Name"
+                        required
+                    />
+                </div>
+
                 <div class="form-group">
                     <label for="email" class="sr-only">Email</label>
                     <input
