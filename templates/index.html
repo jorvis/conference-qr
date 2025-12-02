@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="text-center mb-4">
+        <h1>Welcome to {{ conference_name }}!</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">QR Code Scavenger Hunt</h3>
+            <p class="card-text">
+                Participate in our conference scavenger hunt and earn a <strong>free drink ticket</strong>!
+            </p>
+
+            <h5 class="mt-4">How to Play:</h5>
+            <ol>
+                <li>Visit exhibitor booths and scan their QR codes</li>
+                <li>Attend sessions and scan the session QR codes</li>
+                <li>Track your progress as you go</li>
+                <li>Complete the challenge to earn your reward!</li>
+            </ol>
+
+            <h5 class="mt-4">To Win:</h5>
+            <ul>
+                <li>Scan <strong>12 exhibitor</strong> QR codes</li>
+                <li>Scan <strong>3 session</strong> QR codes</li>
+            </ul>
+
+            <div class="alert alert-info mt-4">
+                <strong>Get Started:</strong> Look for QR codes at exhibitor booths and session rooms throughout the conference. Simply scan any QR code with your phone's camera to begin!
+            </div>
+
+            {% if has_email %}
+                <div class="text-center mt-4">
+                    <a href="/cgi/progress.cgi" class="btn btn-primary">Check My Progress</a>
+                </div>
+            {% else %}
+                <div class="text-center mt-4">
+                    <p class="text-muted">Scan your first QR code to start tracking your progress!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-4 text-muted text-center">
+        <small>Questions? Visit the registration desk for assistance.</small>
+    </div>
+{% endblock %}

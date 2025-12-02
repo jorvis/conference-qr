@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+
+import os
+import http.cookies
+from common import render_template, print_html
+
+def main():
+    cookie = http.cookies.SimpleCookie(os.environ.get("HTTP_COOKIE", ""))
+    has_email = "attendee_email" in cookie
+    
+    print_html(render_template("index.html", has_email=has_email))
+
+if __name__ == "__main__":
+    main()
