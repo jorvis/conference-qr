@@ -2,6 +2,7 @@
 
 import os, cgi
 from db import get_db
+from config import EXHIBITORS_REQUIRED, SESSIONS_REQUIRED
 from common import render_template, print_html
 
 def main():
@@ -35,7 +36,7 @@ def main():
     )
     p = cur.fetchone() or {"exhibitors": 0, "sessions": 0}
 
-    q = p["exhibitors"] >= 12 and p["sessions"] >= 3
+    q = p["exhibitors"] >= EXHIBITORS_REQUIRED and p["sessions"] >= SESSIONS_REQUIRED
     
     # Get all exhibitors with scan status
     cur.execute("""
@@ -67,7 +68,9 @@ def main():
         sessions=p["sessions"],
         qualified=q,
         exhibitor_list=exhibitor_list,
-        session_list=session_list
+        session_list=session_list,
+        exhibitors_required=EXHIBITORS_REQUIRED,
+        sessions_required=SESSIONS_REQUIRED
     ))
     
     cur.close()

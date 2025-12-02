@@ -2,7 +2,7 @@
 
 import os, cgi, http.cookies
 import hmac, hashlib
-from config import QR_SECRET
+from config import QR_SECRET, EXHIBITORS_REQUIRED, SESSIONS_REQUIRED
 
 from db import get_db
 from common import render_template, print_html
@@ -63,7 +63,7 @@ def main():
                 "FROM scans s JOIN places p ON p.id=s.place_id WHERE s.attendee_id=%s", 
                 (attendee_id,))
     p = cur.fetchone() or {"exhibitors": 0, "sessions": 0}
-    q = (p["exhibitors"] >= 12 and p["sessions"] >= 3)
+    q = (p["exhibitors"] >= EXHIBITORS_REQUIRED and p["sessions"] >= SESSIONS_REQUIRED)
 
     # Get all exhibitors with scan status
     cur.execute("""
@@ -90,7 +90,8 @@ def main():
     print_html(render_template("scan.html", place=place, email=email, 
                                exhibitors=p["exhibitors"], sessions=p["sessions"], 
                                qualified=q, duplicate_scan=duplicate_scan,
-                               exhibitor_list=exhibitor_list, session_list=session_list))
+                               exhibitor_list=exhibitor_list, session_list=session_list,
+                               exhibitors_required=EXHIBITORS_REQUIRED, sessions_required=SESSIONS_REQUIRED))
 
     cur.close()
     conn.close()

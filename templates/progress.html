@@ -23,11 +23,11 @@
         <p><strong>{{ email }}</strong></p>
 
         {# compute percentages for clearer markup #}
-        {% set exhibitors_pct = (exhibitors / 12 * 100) | round(0) %}
-        {% set sessions_pct = (sessions / 3 * 100) | round(0) %}
+        {% set exhibitors_pct = (exhibitors / exhibitors_required * 100) | round(0) %}
+        {% set sessions_pct = (sessions / sessions_required * 100) | round(0) %}
 
         <div class="mb-3">
-            <label>Exhibitors ({{ exhibitors }}/12)</label>
+            <label>Exhibitors ({{ exhibitors }}/{{ exhibitors_required }})</label>
             <div class="progress">
                 <div class="progress-bar" role="progressbar"
                          style="width: {{ exhibitors_pct }}%;"
@@ -38,7 +38,7 @@
         </div>
 
         <div class="mb-3">
-            <label>Sessions ({{ sessions }}/3)</label>
+            <label>Sessions ({{ sessions }}/{{ sessions_required }})</label>
             <div class="progress">
                 <div class="progress-bar" role="progressbar"
                          style="width: {{ sessions_pct }}%;"
