@@ -2,20 +2,12 @@
 
 import os, cgi
 from db import get_db
-from config import ADMIN_KEY
 from common import render_template, print_html
 
 def main():
     form = cgi.FieldStorage()
-    key = form.getfirst("key", "")
     email = form.getfirst("email", "").strip().lower()
 
-    if key != ADMIN_KEY: 
-        print_html(render_template("admin.html", unauthorized=True))
-        return
-
-    if form.getfirst("email"):
-        email = form.getfirst("email").strip().lower()
     if not email:
         print_html(render_template("progress.html", no_email=True))
         return

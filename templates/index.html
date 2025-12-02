@@ -32,7 +32,7 @@
 
             {% if has_email %}
                 <div class="text-center mt-4">
-                    <a href="/cgi/progress.cgi" class="btn btn-primary">Check My Progress</a>
+                    <a href="/cgi/progress.cgi?email={{ user_email }}" class="btn btn-primary">Check My Progress</a>
                 </div>
             {% else %}
                 <div class="text-center mt-4">
