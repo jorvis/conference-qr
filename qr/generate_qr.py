@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate QR codes for conference exhibitors and sessions.
-Reads configuration from config.py for consistency.
+Reads configuration and place codes from the database.
 """
 
 import os
@@ -10,9 +10,10 @@ import hmac
 import hashlib
 import subprocess
 
-# Add parent directory to path to import config
+# Add parent directory to path to import modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'cgi'))
 from config import BASE_URL, QR_SECRET
+from db import get_db
 
 def generate_signature(code, secret):
     """Generate HMAC-SHA256 signature for a code."""
@@ -49,16 +50,28 @@ def main():
     # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     
-    # List of codes to generate QR codes for
-    codes = [
-        'E01', 'E02', 'E03', 'E04', 'E05', 'E06', 'E07', 'E08', 'E09', 'E10',
-        'E11', 'E12', 'E13', 'E14', 'E15', 'E16', 'E17', 'E18', 'E19', 'E20',
-        'E21', 'E22', 'E23', 'E24', 'S01', 'S02', 'S03'
-    ]
+    # Get codes from database
+    try:
+        conn = get_db()
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT code FROM places ORDER BY code")
+        places = cur.fetchall()
+        cur.close()
+        conn.close()
+        
+        if not places:
+            print("Error: No places found in database", file=sys.stderr)
+            sys.exit(1)
+        
+        codes = [place['code'] for place in places]
+    except Exception as e:
+        print(f"Error connecting to database: {e}", file=sys.stderr)
+        sys.exit(1)
     
     print(f"Generating QR codes using:")
     print(f"  BASE_URL: {BASE_URL}")
     print(f"  Output directory: {output_dir}")
+    print(f"  Found {len(codes)} places in database")
     print()
     
     # Generate QR codes
