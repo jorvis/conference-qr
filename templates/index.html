@@ -1,33 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="text-center mb-4">
-        <h1>Welcome to {{ conference_name }}!</h1>
-    </div>
 
     <div class="card">
         <div class="card-body">
-            <h3 class="card-title">QR Code Scavenger Hunt</h3>
+            <h3 class="card-title">How it works</h3>
             <p class="card-text">
-                Participate in our conference scavenger hunt and earn a <strong>free drink ticket</strong>!
+                Scan a QR code to stamp your passport. Collect all the required passport stamps 
+                and be entered to win! Winners will be announced at the Hair Ball on Tuesday night 
+                and notified via email.
             </p>
+
+            <h5 class="mt-4">Prizes:</h5>
+            <ol>
+                <li>1 complimentary registration for the 2027 MidWinter Meeting</li>
+                <li>1 complimentary year of ARO membership</li>
+            </ol>
 
             <h5 class="mt-4">How to Play:</h5>
             <ol>
-                <li>Visit exhibitor booths and scan their QR codes</li>
-                <li>Attend sessions and scan the session QR codes</li>
-                <li>Track your progress as you go</li>
-                <li>Complete the challenge to earn your reward!</li>
+                <li>Input your information the first time you can scan a code. You won't need to again.</li>
+                <li>Visit all {{ exhibitors_required }} of our exhibitors and scan each of their QR codes</li>
+                <li>Attend all {{ sessions_required }} Passport Stop sessions and scan each QR code (Presidential Symposium, General Assembly, and the Awards Ceremony)</li>
+                <li>Watch your progress update each time you scan a new QR code</li>
+                <li>Complete your passport by 5:00PM local time on Tuesday, February 10th, 2026 to be entered to win!</li>
             </ol>
 
-            <h5 class="mt-4">To Win:</h5>
-            <ul>
-                <li>Scan <strong>{{ exhibitors_required }} exhibitor</strong> QR codes</li>
-                <li>Scan <strong>{{ sessions_required }} session</strong> QR codes</li>
-            </ul>
-
             <div class="alert alert-info mt-4">
-                <strong>Get Started:</strong> Look for QR codes at exhibitor booths and session rooms throughout the conference. Simply scan any QR code with your phone's camera to begin!
+                <strong>Get Started:</strong> Look for QR codes at exhibitor booths and 
+                session rooms throughout the conference. Simply scan any QR code with 
+                your phone's camera to begin!
             </div>
 
             {% if has_email %}
