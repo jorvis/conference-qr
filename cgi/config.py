@@ -8,7 +8,7 @@ DB_CONFIG={
 
 BASE_URL="http://localhost"
 
-CONFERENCE_NAME="ARO MWM Passport"
+CONFERENCE_NAME="ARO MWM Explorer Challenge"
 
 ADMIN_KEY="change_me_admin_key"
 
