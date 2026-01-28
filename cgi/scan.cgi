@@ -2,6 +2,7 @@
 
 import os, cgi, http.cookies
 import hmac, hashlib
+import pymysql.cursors
 from config import QR_SECRET, EXHIBITORS_REQUIRED, SESSIONS_REQUIRED
 
 from db import get_db
