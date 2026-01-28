@@ -15,7 +15,7 @@ def main():
     email = cookie["attendee_email"].value if "attendee_email" in cookie else None
     
     conn = get_db()
-    cur = conn.cursor(dictionary=True)
+    cur = conn.cursor(pymysql.cursors.DictCursor)
 
     if not code:
         print_html(render_template("scan.html", message="Missing QR code parameter."))
