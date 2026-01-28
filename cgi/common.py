@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from config import CONFERENCE_NAME
+import os
 
-env=Environment(loader=FileSystemLoader("/var/www/html/templates"),autoescape=select_autoescape(["html","xml"]))
+env = Environment(
+    loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "..", "templates")),
+    autoescape=select_autoescape(["html", "xml"])
+)
 
 def render_template(name,**ctx):
     ctx.setdefault("conference_name",CONFERENCE_NAME)
