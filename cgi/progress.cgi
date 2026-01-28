@@ -2,6 +2,7 @@
 
 import os, cgi
 from db import get_db
+import pymysql.cursors
 from config import EXHIBITORS_REQUIRED, SESSIONS_REQUIRED
 from common import render_template, print_html
 
@@ -14,7 +15,7 @@ def main():
         return
 
     conn = get_db()
-    cur = conn.cursor(dictionary=True)
+    cur = conn.cursor(pymysql.cursors.DictCursor)
     cur.execute(
         "SELECT id, name FROM attendees WHERE email=%s", (email,)
     )
