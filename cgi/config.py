@@ -6,7 +6,7 @@ DB_CONFIG={
     "port":3306
 }
 
-BASE_URL="http://localhost"
+BASE_URL="https://qr.umgear.org"
 
 CONFERENCE_NAME="ARO MWM Explorer Challenge"
 

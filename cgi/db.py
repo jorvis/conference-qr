@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import mysql.connector
 from config import DB_CONFIG
+import pymysql
 
 def get_db(): 
-    return mysql.connector.connect(**DB_CONFIG)
+    return pymysql.connect(**DB_CONFIG)
