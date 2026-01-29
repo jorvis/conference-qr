@@ -8,6 +8,21 @@
     {% else %}
         <h2>Admin Dashboard</h2>
 
+        {% if winners %}
+            <div class="alert alert-success">
+                <h4>🎉 Random Winners!</h4>
+                <ul>
+                    {% for winner in winners %}
+                        <li><strong>{{ winner.name }}</strong> ({{ winner.email }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No qualified winners yet.
+            </div>
+        {% endif %}
+
         <p>
             <strong>Attendees:</strong> {{ attendees }}<br>
             <strong>Total Scans:</strong> {{ scans }}
