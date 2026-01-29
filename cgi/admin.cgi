@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import cgi
+import pymysql.cursors
 from db import get_db
 from config import ADMIN_KEY
 from common import render_template, print_html
@@ -13,7 +14,8 @@ def main():
         print_html(render_template("admin.html", unauthorized=True))
         return
     
-    conn=get_db(); cur=conn.cursor(dictionary=True)
+    conn=get_db(); 
+    cur=conn.cursor(pymysql.cursors.DictCursor)
     cur.execute("SELECT COUNT(*) c FROM attendees"); attendees=cur.fetchone()["c"]
     cur.execute("SELECT COUNT(*) c FROM scans"); scans=cur.fetchone()["c"]
 

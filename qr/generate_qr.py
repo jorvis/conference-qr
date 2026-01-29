@@ -9,6 +9,7 @@ import sys
 import hmac
 import hashlib
 import subprocess
+import pymysql.cursors
 
 # Add parent directory to path to import modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'cgi'))
@@ -19,11 +20,14 @@ def generate_signature(code, secret):
     """Generate HMAC-SHA256 signature for a code."""
     return hmac.new(secret.encode(), code.encode(), hashlib.sha256).hexdigest()
 
-def generate_qr_code(code, output_dir):
+def generate_qr_code(code, label, output_dir):
     """Generate a QR code for the given code."""
     sig = generate_signature(code, QR_SECRET)
     url = f"{BASE_URL}/cgi/scan.cgi?code={code}&sig={sig}"
-    output_file = os.path.join(output_dir, f"{code}.png")
+
+    # Sanitize label to only alphanumeric and underscore
+    sanitized_label = "".join(c if c.isalnum() or c == "_" else "" for c in label[:10].replace(" ", "_"))
+    output_file = os.path.join(output_dir, f"{code}_{sanitized_label}.png")
     
     try:
         subprocess.run(
@@ -53,8 +57,8 @@ def main():
     # Get codes from database
     try:
         conn = get_db()
-        cur = conn.cursor(dictionary=True)
-        cur.execute("SELECT code FROM places ORDER BY code")
+        cur = conn.cursor(pymysql.cursors.DictCursor)
+        cur.execute("SELECT code, name FROM places ORDER BY code")
         places = cur.fetchall()
         cur.close()
         conn.close()
@@ -63,7 +67,7 @@ def main():
             print("Error: No places found in database", file=sys.stderr)
             sys.exit(1)
         
-        codes = [place['code'] for place in places]
+        codes = places
     except Exception as e:
         print(f"Error connecting to database: {e}", file=sys.stderr)
         sys.exit(1)
@@ -76,8 +80,8 @@ def main():
     
     # Generate QR codes
     success_count = 0
-    for code in codes:
-        if generate_qr_code(code, output_dir):
+    for place in codes:
+        if generate_qr_code(place['code'], place['name'], output_dir):
             success_count += 1
     
     print()
